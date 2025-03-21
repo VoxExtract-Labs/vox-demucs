@@ -1,5 +1,5 @@
 # Base image supports Nvidia CUDA and is based on Ubuntu
-FROM nvidia/cuda:12.6.2-base-ubuntu22.04
+FROM nvidia/cuda:12.4.1-base-ubuntu22.04
 
 USER root
 ENV TORCH_HOME=/data/models
