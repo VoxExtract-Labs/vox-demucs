@@ -1,0 +1,24 @@
+{
+    "name": "vox-demucs",
+    "module": "src/index.ts",
+    "type": "module",
+    "scripts": {
+        "lint": "bun biome check",
+        "lint:fix": "bun biome check --write",
+        "prepare": "if [ \"$CI\" = \"true\" ]; then echo 'CI detected: skipping lefthook install'; else bunx lefthook install; fi",
+        "docker:build:alpine": "docker build -t vox-demucs:alpine ./docker/alpine",
+        "docker:build:slim": "docker build -t vox-demucs:slim ./docker/slim",
+        "docker:build:ubuntu": "docker build -t vox-demucs:ubuntu ./docker/ubuntu"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "^1.9.4",
+        "@commitlint/cli": "^19.8.0",
+        "@commitlint/config-conventional": "^19.8.0",
+        "@types/bun": "latest",
+        "lefthook": "^1.11.3",
+        "voice-extractor-shared": "github:VoxExtract-Labs/voice-extractor-shared#main"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    }
+}
