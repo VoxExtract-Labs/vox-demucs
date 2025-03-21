@@ -66,6 +66,7 @@ export interface DemucsConfig extends DemucsConfigBase {
     input: string;
     silent?: boolean;
     demucsEngine?: 'docker' | 'local';
+    dockerImage?: string;
 }
 
 /**
@@ -78,4 +79,5 @@ export const DEFAULT_CONFIG: Partial<DemucsConfig> = {
     device: 'cpu',
     silent: true,
     demucsEngine: 'local',
+    dockerImage: 'voxextractlabs/vox-demucs:cuda12.4.1-ubuntu22.04-demucs4.0.1',
 };
