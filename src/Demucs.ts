@@ -138,11 +138,14 @@ export class Demucs {
         if (this.config.demucsEngine === 'docker') {
             const inputDir = dirname(inputFilePath);
             const fileName = basename(inputFilePath);
-            // Use the declared volumes in the Dockerfile:
+
+            // Build the Docker run command.
+            const gpuArgs = this.config.device === 'cuda' ? ['--gpus', 'all'] : [];
             cmd = [
                 'docker',
                 'run',
                 '--rm',
+                ...gpuArgs,
                 '-w',
                 '/app',
                 // Instead of mounting to /app/tests, mount to /data/input.
@@ -150,7 +153,7 @@ export class Demucs {
                 `${inputDir}:/data/input`,
                 // Optionally, if you want to map output as well, you could add:
                 // "-v", "<host output path>:/data/output",
-                'vox-demucs:slim',
+                'vox-demucs:ubuntu',
                 'demucs',
                 ...args.slice(0, args.length - 1),
                 // Replace the input file argument with the container path.

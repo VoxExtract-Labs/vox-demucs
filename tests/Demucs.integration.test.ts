@@ -43,7 +43,7 @@ describe('Integration tests for Demucs', () => {
                 out: './tmp',
                 device: 'cpu',
                 demucsEngine: 'docker',
-                silent: false,
+                silent: true,
             });
             const output = await demucs.run();
             expect(output).toContain('Separating track');
