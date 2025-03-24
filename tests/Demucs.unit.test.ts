@@ -31,7 +31,7 @@ describe('Demucs Unit Tests', () => {
             });
 
             // Construct a fake Subprocess object with all required properties.
-            const fakeProc: Subprocess = {
+            return {
                 stdout: fakeStdout,
                 stderr: fakeStderr,
                 stdin: undefined,
@@ -63,7 +63,6 @@ describe('Demucs Unit Tests', () => {
                     /* no-op */
                 },
             };
-            return fakeProc;
         }) as typeof Bun.spawn;
     });
 
