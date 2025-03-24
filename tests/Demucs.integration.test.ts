@@ -7,7 +7,7 @@ const testAudioFile = './tests/test.mp3';
 const TIMEOUT = 90000;
 
 describe('Integration tests for Demucs', () => {
-    test(
+    test.skipIf(String(Bun.env.GITHUB_ACTIONS) === 'true')(
         'should run Demucs locally and produce output',
         async () => {
             const demucs = new Demucs({
