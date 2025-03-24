@@ -6,11 +6,13 @@ import { DEFAULT_CONFIG, type DemucsConfig } from '@vox-demucs/DemucsConfig';
  *
  * Usage examples:
  *
- *   // Using static init with overrides (input file and out folder must be provided)
+ *   // Using static init with overrides (input file, out folder, and optional docker image must be provided)
  *   const results = await Demucs.init({
  *     input: "path/to/file.mp3",
  *     out: "output-folder",
- *     device: "cpu"
+ *     device: "cpu",
+ *     demucsEngine: "docker",         // or "local"
+ *     dockerImage: "voxextractlabs/vox-demucs:cuda12.4.1-ubuntu22.04-demucs4.0.1" // optional
  *   }).run();
  *
  *   // Or, using the constructor directly:
@@ -47,8 +49,7 @@ export class Demucs {
      * extracts its directory and basename, and mounts that directory into the container,
      * replacing the input argument with the container path.
      *
-     * When `silent` is false, the stdout and stderr streams are read and logged as
-     * they arrive (streaming output). When `silent` is true, the outputs are buffered.
+     * When `silent` is false, the stdout and stderr streams are streamed and logged as they arrive.
      *
      * @returns A promise that resolves with the combined stdout and stderr output.
      */
@@ -134,23 +135,23 @@ export class Demucs {
         args.push(inputFilePath);
 
         let cmd: string[];
-
         if (this.config.demucsEngine === 'docker') {
+            // For Docker mode, mount the directory containing the input file.
             const inputDir = dirname(inputFilePath);
             const fileName = basename(inputFilePath);
-            // Use the declared volumes in the Dockerfile:
+            // Use the dockerImage from the config if provided, otherwise default to "vox-demucs:ubuntu".
+            const dockerImage = this.config.dockerImage || 'vox-demucs:ubuntu';
             cmd = [
                 'docker',
                 'run',
                 '--rm',
+                // Conditionally add GPU support if device is cuda:
+                ...(this.config.device === 'cuda' ? ['--gpus', 'all'] : []),
                 '-w',
                 '/app',
-                // Instead of mounting to /app/tests, mount to /data/input.
                 '-v',
                 `${inputDir}:/data/input`,
-                // Optionally, if you want to map output as well, you could add:
-                // "-v", "<host output path>:/data/output",
-                'vox-demucs:slim',
+                dockerImage,
                 'demucs',
                 ...args.slice(0, args.length - 1),
                 // Replace the input file argument with the container path.
@@ -173,16 +174,14 @@ export class Demucs {
             stderr: 'pipe',
         });
 
-        // We'll create a TextDecoder and read both stdout and stderr as they come.
+        // We'll stream the output if silent is false.
         const decoder = new TextDecoder();
         let stdoutOutput = '';
         let stderrOutput = '';
 
         if (!this.config.silent) {
-            // Stream stdout
             const stdoutReader = proc.stdout.getReader();
             const stderrReader = proc.stderr.getReader();
-            // Read stdout and log it in real time.
             const stdoutPromise = (async () => {
                 let result = '';
                 while (true) {
@@ -196,7 +195,6 @@ export class Demucs {
                 }
                 return result;
             })();
-            // Read stderr and log it in real time.
             const stderrPromise = (async () => {
                 let result = '';
                 while (true) {
@@ -210,8 +208,6 @@ export class Demucs {
                 }
                 return result;
             })();
-
-            // Await process exit concurrently with streaming.
             const [stdoutText, stderrText, exitCode] = await Promise.all([stdoutPromise, stderrPromise, proc.exited]);
             stdoutOutput = stdoutText;
             stderrOutput = stderrText;
@@ -219,11 +215,9 @@ export class Demucs {
                 throw new Error(`Demucs process failed with exit code ${exitCode}:\n${stderrOutput}`);
             }
         } else {
-            // If silent, simply buffer the output.
-            const stdoutText = await new Response(proc.stdout).text();
-            const stderrText = await new Response(proc.stderr).text();
-            stdoutOutput = stdoutText;
-            stderrOutput = stderrText;
+            // If silent, buffer the outputs.
+            stdoutOutput = await new Response(proc.stdout).text();
+            stderrOutput = await new Response(proc.stderr).text();
             const exitCode = await proc.exited;
             if (exitCode !== 0) {
                 throw new Error(`Demucs process failed with exit code ${exitCode}:\n${stderrOutput}`);

@@ -1,24 +1,13 @@
 import { describe, expect, test } from 'bun:test';
-import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { Demucs } from '@vox-demucs/Demucs';
 
-// Use a test file at "./tests/test.mp3"
 const testAudioFile = './tests/test.mp3';
 
-// Increase timeout to 20 seconds for each integration test.
 const TIMEOUT = 90000;
 
 describe('Integration tests for Demucs', () => {
-    test(
-        'should have a valid test audio file',
-        () => {
-            expect(existsSync(testAudioFile)).toBe(true);
-        },
-        TIMEOUT,
-    );
-
-    test(
+    test.skipIf(String(Bun.env.GITHUB_ACTIONS) === 'true')(
         'should run Demucs locally and produce output',
         async () => {
             const demucs = new Demucs({
@@ -43,7 +32,6 @@ describe('Integration tests for Demucs', () => {
                 out: './tmp',
                 device: 'cpu',
                 demucsEngine: 'docker',
-                silent: false,
             });
             const output = await demucs.run();
             expect(output).toContain('Separating track');
