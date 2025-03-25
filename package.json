@@ -17,6 +17,7 @@
         "lint": "bun biome check",
         "lint:fix": "bun biome check --write",
         "coverage": "bun test --coverage --coverage-reporter=lcov",
+        "docs": "typedoc",
         "prepare": "if [ \"$CI\" = \"true\" ]; then echo 'CI detected: skipping lefthook install'; else bunx lefthook install; fi"
     },
     "repository": {
@@ -39,6 +40,7 @@
         "directory-tree": "^3.5.2",
         "lefthook": "^1.11.3",
         "prompts": "^2.4.2",
+        "typedoc": "^0.28.1",
         "voice-extractor-shared": "github:VoxExtract-Labs/voice-extractor-shared#main"
     },
     "peerDependencies": {
