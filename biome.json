@@ -8,7 +8,7 @@
     },
     "files": {
         "ignoreUnknown": false,
-        "ignore": ["node_modules/", "docker/data/"]
+        "ignore": ["node_modules/", "ai-assist/", "coverage/", "docker/", "docs/"]
     },
     "formatter": {
         "enabled": true,
