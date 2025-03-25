@@ -12,7 +12,7 @@ import { DEFAULT_CONFIG, type DemucsConfig } from '@vox-demucs/DemucsConfig';
  *     out: "output-folder",
  *     device: "cpu",
  *     demucsEngine: "docker",         // or "local"
- *     dockerImage: "voxextractlabs/vox-demucs:cuda12.4.1-ubuntu22.04-demucs4.0.1" // optional
+ *     dockerImage: "voxextractlabs/vox-demucs:1.0.0" // optional
  *   }).run();
  *
  *   // Or, using the constructor directly:

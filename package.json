@@ -1,21 +1,49 @@
 {
-    "name": "vox-demucs",
-    "module": "src/index.ts",
+    "name": "@voxextractlabs/vox-demucs",
+    "version": "0.1.0",
+    "description": "A Bun-native interface for vocal/instrument separation using Demucs",
+    "license": "MIT",
     "type": "module",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+        }
+    },
     "scripts": {
         "lint": "bun biome check",
         "lint:fix": "bun biome check --write",
+        "coverage": "bun test --coverage --coverage-reporter=lcov",
         "prepare": "if [ \"$CI\" = \"true\" ]; then echo 'CI detected: skipping lefthook install'; else bunx lefthook install; fi"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/VoxExtract-Labs/vox-demucs.git"
+    },
+    "bugs": {
+        "url": "https://github.com/VoxExtract-Labs/vox-demucs/issues"
+    },
+    "homepage": "https://github.com/VoxExtract-Labs/vox-demucs#readme",
+    "engines": {
+        "node": ">=18",
+        "bun": ">=1.0"
     },
     "devDependencies": {
         "@biomejs/biome": "^1.9.4",
         "@commitlint/cli": "^19.8.0",
         "@commitlint/config-conventional": "^19.8.0",
         "@types/bun": "latest",
+        "directory-tree": "^3.5.2",
         "lefthook": "^1.11.3",
+        "prompts": "^2.4.2",
         "voice-extractor-shared": "github:VoxExtract-Labs/voice-extractor-shared#main"
     },
     "peerDependencies": {
         "typescript": "^5.0.0"
-    }
+    },
+    "keywords": ["demucs", "audio-separation", "voice-extraction", "machine-learning", "bun", "typescript"],
+    "files": ["dist", "LICENSE", "README.md"]
 }

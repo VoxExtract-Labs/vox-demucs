@@ -1,12 +1,12 @@
-name: PR Check
+name: Build Status
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
 jobs:
-  docker-check:
+  build-status:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -26,12 +26,5 @@ jobs:
       - name: Lint project files
         run: bun run lint
 
-      - name: Run tests with coverage
-        run: bun run coverage
-
-      - name: Upload to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage/lcov.info
-          flags: unittests
+      - name: Run tests
+        run: bun test
