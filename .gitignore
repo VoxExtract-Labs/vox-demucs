@@ -180,3 +180,4 @@ env/*
 
 docker/*
 ai-assist/*
+docs/*
