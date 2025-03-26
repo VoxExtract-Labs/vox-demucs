@@ -178,6 +178,8 @@ tmp/*
 !tmp/.gitkeep
 env/*
 
+publish/*
+todos.md
 docker/*
 ai-assist/*
 docs/*
