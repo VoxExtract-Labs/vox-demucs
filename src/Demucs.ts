@@ -44,7 +44,7 @@ export class Demucs {
      * Runs Demucs with the current configuration.
      *
      * This method builds the CLI arguments based on the configuration,
-     * spawns the process using Node.js `child_process.spawn`, and returns the output.
+     * calls the abstracted executor and returns the output.
      *
      * For Docker mode, it converts the input file path to an absolute path,
      * mounts the file directory, and rewrites the input argument accordingly.
@@ -159,15 +159,29 @@ export class Demucs {
             console.log('Executing command:', cmd.join(' '));
         }
 
+        const { stdout, stderr, exitCode } = await this.executeCommand(cmd);
+
+        if (exitCode !== 0) {
+            throw new Error(`Demucs process failed with exit code ${exitCode}:${stderr}`);
+        }
+
+        return stdout + stderr;
+    }
+
+    /**
+     * Executes a given command array using Node.js child_process.spawn,
+     * streaming output if `silent` is false.
+     *
+     * This is abstracted for easier testing.
+     */
+    public async executeCommand(cmd: string[]): Promise<{ stdout: string; stderr: string; exitCode: number }> {
         return new Promise((resolve, reject) => {
-            const proc = spawn(cmd[0], cmd.slice(1), {
-                stdio: ['ignore', 'pipe', 'pipe'],
-            });
+            const proc = spawn(cmd[0], cmd.slice(1), { stdio: ['ignore', 'pipe', 'pipe'] });
 
             let stdout = '';
             let stderr = '';
 
-            proc.stdout.on('data', (chunk) => {
+            proc.stdout?.on('data', (chunk) => {
                 const text = chunk.toString();
                 stdout += text;
                 if (!this.config.silent) {
@@ -175,7 +189,7 @@ export class Demucs {
                 }
             });
 
-            proc.stderr.on('data', (chunk) => {
+            proc.stderr?.on('data', (chunk) => {
                 const text = chunk.toString();
                 stderr += text;
                 if (!this.config.silent) {
@@ -184,11 +198,11 @@ export class Demucs {
             });
 
             proc.on('close', (code) => {
-                if (code !== 0) {
-                    reject(new Error(`Demucs process failed with exit code ${code}:${stderr}`));
-                } else {
-                    resolve(stdout + stderr);
-                }
+                resolve({ stdout, stderr, exitCode: code ?? 0 });
+            });
+
+            proc.on('error', (err) => {
+                reject(err);
             });
         });
     }
