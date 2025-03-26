@@ -19,6 +19,8 @@
         "noUnusedLocals": false,
         "noUnusedParameters": false,
         "noPropertyAccessFromIndexSignature": false,
+        "types": ["bun-types"],
+
         "baseUrl": "./",
         "paths": {
             "@vox-demucs/*": ["src/*"]

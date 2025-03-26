@@ -1,16 +1,19 @@
 {
     "name": "@voxextractlabs/vox-demucs",
     "version": "1.0.0",
-    "description": "A Bun-native interface for vocal/instrument separation using Demucs",
     "license": "MIT",
     "type": "module",
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",
-    "types": "./dist/index.d.ts",
+    "types": "./dist/types/index.d.ts",
+    "files": ["dist", "LICENSE", "README.md"],
+    "homepage": "https://voxextract-labs.github.io/vox-demucs/",
+    "keywords": ["demucs", "audio-separation", "voice-extraction", "machine-learning", "bun", "typescript"],
     "exports": {
         ".": {
             "import": "./dist/index.js",
-            "require": "./dist/index.cjs"
+            "require": "./dist/index.cjs",
+            "types": "./dist/types/index.d.ts"
         }
     },
     "scripts": {
@@ -18,19 +21,10 @@
         "lint:fix": "bun biome check --write",
         "coverage": "bun test --coverage --coverage-reporter=lcov",
         "docs": "typedoc",
+        "build": "bun run build:dist && bun run build:types",
+        "build:dist": "bun run build.ts",
+        "build:types": "tsc -p tsconfig.types.json",
         "prepare": "if [ \"$CI\" = \"true\" ]; then echo 'CI detected: skipping lefthook install'; else bunx lefthook install; fi"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/VoxExtract-Labs/vox-demucs.git"
-    },
-    "bugs": {
-        "url": "https://github.com/VoxExtract-Labs/vox-demucs/issues"
-    },
-    "homepage": "https://voxextract-labs.github.io/vox-demucs/",
-    "engines": {
-        "node": ">=18",
-        "bun": ">=1.0"
     },
     "devDependencies": {
         "@biomejs/biome": "^1.9.4",
@@ -46,6 +40,16 @@
     "peerDependencies": {
         "typescript": "^5.0.0"
     },
-    "keywords": ["demucs", "audio-separation", "voice-extraction", "machine-learning", "bun", "typescript"],
-    "files": ["dist", "LICENSE", "README.md"]
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/VoxExtract-Labs/vox-demucs.git"
+    },
+    "bugs": {
+        "url": "https://github.com/VoxExtract-Labs/vox-demucs/issues"
+    },
+    "description": "A Bun-native interface for vocal/instrument separation using Demucs",
+    "engines": {
+        "node": ">=18",
+        "bun": ">=1.0"
+    }
 }
