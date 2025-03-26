@@ -27,7 +27,7 @@
     "bugs": {
         "url": "https://github.com/VoxExtract-Labs/vox-demucs/issues"
     },
-    "homepage": "https://github.com/VoxExtract-Labs/vox-demucs#readme",
+    "homepage": "https://voxextract-labs.github.io/vox-demucs/",
     "engines": {
         "node": ">=18",
         "bun": ">=1.0"

@@ -1,12 +1,16 @@
 [![NPM](https://img.shields.io/npm/v/@voxextractlabs/vox-demucs?label=npm)](https://www.npmjs.com/package/@voxextractlabs/vox-demucs)
 [![License](https://img.shields.io/npm/l/@voxextractlabs/vox-demucs)](./LICENSE)
-[![Build Status](https://github.com/VoxExtract-Labs/vox-demucs/actions/workflows/build-status.yml/badge.svg)](https://github.com/VoxExtract-Labs/vox-demucs/actions/workflows/build-status.yml)
-[![codecov](https://codecov.io/gh/VoxExtract-Labs/vox-demucs/graph/badge.svg?token=76R6BPF9WK)](https://codecov.io/gh/VoxExtract-Labs/vox-demucs)
+[![Build Status](https://github.com/VoxExtract-Labs/vox-demucs/actions/workflows/pr-check.yml/badge.svg)](https://github.com/VoxExtract-Labs/vox-demucs/actions/workflows/pr-check.yml)
+[![Codecov](https://codecov.io/gh/VoxExtract-Labs/vox-demucs/graph/badge.svg?token=76R6BPF9WK)](https://codecov.io/gh/VoxExtract-Labs/vox-demucs)
 [![Bundlephobia](https://img.shields.io/bundlephobia/minzip/@voxextractlabs/vox-demucs)](https://bundlephobia.com/package/@voxextractlabs/vox-demucs)
 
 # @voxextractlabs/vox-demucs
 
 > A Bun-native wrapper for Facebook’s [Demucs](https://github.com/facebookresearch/demucs) to isolate vocals and instruments from audio tracks. Built for local inference with options for Docker or direct execution.
+
+🌐 **Live Docs** → [voxextract-labs.github.io/vox-demucs](https://voxextract-labs.github.io/vox-demucs/)
+
+📘 **API Documentation**: [https://voxextract-labs.github.io/vox-demucs/](https://voxextract-labs.github.io/vox-demucs/)
 
 ---
 
