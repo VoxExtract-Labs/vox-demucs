@@ -46,17 +46,6 @@
     "peerDependencies": {
         "typescript": "^5.0.0"
     },
-    "keywords": [
-        "demucs",
-        "audio-separation",
-        "voice-extraction",
-        "machine-learning",
-        "bun",
-        "typescript"
-    ],
-    "files": [
-        "dist",
-        "LICENSE",
-        "README.md"
-    ]
+    "keywords": ["demucs", "audio-separation", "voice-extraction", "machine-learning", "bun", "typescript"],
+    "files": ["dist", "LICENSE", "README.md"]
 }
