@@ -136,7 +136,9 @@ export class Demucs {
         if (this.config.demucsEngine === 'docker') {
             const inputDir = dirname(inputFilePath);
             const fileName = basename(inputFilePath);
+            const outputDir = resolve(this.config.out ?? './output');
             const dockerImage = this.config.dockerImage || 'vox-demucs:ubuntu';
+
             cmd = [
                 'docker',
                 'run',
@@ -146,6 +148,8 @@ export class Demucs {
                 '/app',
                 '-v',
                 `${inputDir}:/data/input`,
+                '-v',
+                `${outputDir}:/app/output`,
                 dockerImage,
                 'demucs',
                 ...args.slice(0, -1),

@@ -2,6 +2,7 @@
 
 import { afterEach, beforeEach, describe, expect, mock, spyOn, test } from 'bun:test';
 
+import { resolve } from 'node:path';
 import { Demucs } from '@vox-demucs/Demucs';
 import type { DemucsConfig } from '@vox-demucs/DemucsConfig';
 
@@ -50,5 +51,6 @@ describe('Demucs Unit Tests (with mocked spawn)', async () => {
         expect(recordedCmd).toContain('--gpus');
         expect(recordedCmd).toContain('all');
         expect(recordedCmd).toContain('/data/input/song.mp3');
+        expect(recordedCmd).toContain(`-v ${resolve(config.out)}:/app/output`);
     });
 });
