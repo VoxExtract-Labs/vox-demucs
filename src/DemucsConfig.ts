@@ -9,13 +9,12 @@
  * - `--repo REPO`: Folder containing all pre-trained models for use with `-n`.
  * - `-v, --verbose`: Enable verbose output.
  * - `-o OUT, --out OUT`: Folder where extracted tracks are saved. A subfolder with the model name will be created.
- * - `--filename FILENAME`: Set the name of the output file. Use "{track}", "{trackext}", "{stem}", "{ext}" to refer to variables of the track name.
- *   Default is "{track}/{stem}.{ext}".
+ * - `--filename FILENAME`: Set the name of the output file. Use "{track}", "{trackext}", "{stem}", "{ext}" to refer to variables of the track name. Default is "{track}/{stem}.{ext}".
  * - `-d DEVICE, --device DEVICE`: Device to use. Default is "cuda" if available, else "cpu".
  * - `--shifts SHIFTS`: Number of random shifts for equivariant stabilization.
  * - `--overlap OVERLAP`: Overlap between the splits.
  * - `--no-split`: Do not split audio in chunks. This can use large amounts of memory.
- * - `--segment SEGMENT`: Set split size of each chunk. This can help save memory of the graphic card.
+ * - `--segment SEGMENT`: Set split size of each chunk. This can help save memory on the graphics card.
  * - `--two-stems STEM`: Only separate audio into {STEM} and no_{STEM}.
  * - `--int24`: Save WAV output as 24-bit.
  * - `--float32`: Save WAV output as float32 (2x bigger).
@@ -60,6 +59,7 @@ export interface DemucsConfigBase {
  * We also add:
  * - `silent`: If true, suppresses automatic logging of process output.
  * - `demucsEngine`: Determines how to run Demucs ("local" or "docker").
+ * - `dockerImage`: The Docker image to use when running in docker mode.
  */
 export interface DemucsConfig extends DemucsConfigBase {
     out: string;
@@ -72,7 +72,7 @@ export interface DemucsConfig extends DemucsConfigBase {
 /**
  * Default configuration values.
  *
- * Note: `out` and `input` are required and have no defaults.
+ * Note: `out` and `input` must be supplied by the caller at runtime.
  */
 export const DEFAULT_CONFIG: Partial<DemucsConfig> = {
     name: 'htdemucs',
