@@ -1,8 +1,9 @@
+import { spawn } from 'node:child_process';
 import { basename, dirname, resolve } from 'node:path';
 import { DEFAULT_CONFIG, type DemucsConfig } from '@vox-demucs/DemucsConfig';
 
 /**
- * The Demucs class allows you to run Demucs via Bun.spawn with a chainable API.
+ * The Demucs class allows you to run Demucs via child_process.spawn with a chainable API.
  *
  * Usage examples:
  *
@@ -43,29 +44,27 @@ export class Demucs {
      * Runs Demucs with the current configuration.
      *
      * This method builds the CLI arguments based on the configuration,
-     * spawns the process using Bun.spawn, and returns the stdout output.
+     * calls the abstracted executor and returns the output.
      *
      * For Docker mode, it converts the input file path to an absolute path,
-     * extracts its directory and basename, and mounts that directory into the container,
-     * replacing the input argument with the container path.
+     * mounts the file directory, and rewrites the input argument accordingly.
      *
-     * When `silent` is false, the stdout and stderr streams are streamed and logged as they arrive.
+     * When `silent` is false, stdout and stderr are streamed in real time.
      *
      * @returns A promise that resolves with the combined stdout and stderr output.
      */
     async run(): Promise<string> {
-        // Get the input file from the configuration.
         let inputFilePath = this.config.input;
         if (!inputFilePath || inputFilePath.trim() === '') {
             throw new Error('Input file not specified in configuration.');
         }
 
-        // For Docker mode, resolve the input file to an absolute path.
+        // Resolve absolute path for Docker engine
         if (this.config.demucsEngine === 'docker') {
             inputFilePath = resolve(inputFilePath);
         }
 
-        // Build CLI arguments from the base configuration.
+        // Build CLI arguments from config
         const args: string[] = [];
         if (this.config.help) {
             args.push('--help');
@@ -131,21 +130,17 @@ export class Demucs {
             args.push('-j', String(this.config.jobs));
         }
 
-        // Append the input file as the track argument.
         args.push(inputFilePath);
 
         let cmd: string[];
         if (this.config.demucsEngine === 'docker') {
-            // For Docker mode, mount the directory containing the input file.
             const inputDir = dirname(inputFilePath);
             const fileName = basename(inputFilePath);
-            // Use the dockerImage from the config if provided, otherwise default to "vox-demucs:ubuntu".
             const dockerImage = this.config.dockerImage || 'vox-demucs:ubuntu';
             cmd = [
                 'docker',
                 'run',
                 '--rm',
-                // Conditionally add GPU support if device is cuda:
                 ...(this.config.device === 'cuda' ? ['--gpus', 'all'] : []),
                 '-w',
                 '/app',
@@ -153,77 +148,62 @@ export class Demucs {
                 `${inputDir}:/data/input`,
                 dockerImage,
                 'demucs',
-                ...args.slice(0, args.length - 1),
-                // Replace the input file argument with the container path.
+                ...args.slice(0, -1),
                 `/data/input/${fileName}`,
             ];
         } else {
-            // Local execution: run demucs with the arguments exactly as provided.
             cmd = ['demucs', ...args];
         }
 
-        // If not silent, log the generated command.
         if (!this.config.silent) {
             console.log('Executing command:', cmd.join(' '));
         }
 
-        // Spawn the Demucs process using Bun.spawn.
-        const proc = Bun.spawn({
-            cmd,
-            stdout: 'pipe',
-            stderr: 'pipe',
-        });
+        const { stdout, stderr, exitCode } = await this.executeCommand(cmd);
 
-        // We'll stream the output if silent is false.
-        const decoder = new TextDecoder();
-        let stdoutOutput = '';
-        let stderrOutput = '';
-
-        if (!this.config.silent) {
-            const stdoutReader = proc.stdout.getReader();
-            const stderrReader = proc.stderr.getReader();
-            const stdoutPromise = (async () => {
-                let result = '';
-                while (true) {
-                    const { done, value } = await stdoutReader.read();
-                    if (done) {
-                        break;
-                    }
-                    const chunk = decoder.decode(value);
-                    result += chunk;
-                    console.log(chunk);
-                }
-                return result;
-            })();
-            const stderrPromise = (async () => {
-                let result = '';
-                while (true) {
-                    const { done, value } = await stderrReader.read();
-                    if (done) {
-                        break;
-                    }
-                    const chunk = decoder.decode(value);
-                    result += chunk;
-                    console.error(chunk);
-                }
-                return result;
-            })();
-            const [stdoutText, stderrText, exitCode] = await Promise.all([stdoutPromise, stderrPromise, proc.exited]);
-            stdoutOutput = stdoutText;
-            stderrOutput = stderrText;
-            if (exitCode !== 0) {
-                throw new Error(`Demucs process failed with exit code ${exitCode}:\n${stderrOutput}`);
-            }
-        } else {
-            // If silent, buffer the outputs.
-            stdoutOutput = await new Response(proc.stdout).text();
-            stderrOutput = await new Response(proc.stderr).text();
-            const exitCode = await proc.exited;
-            if (exitCode !== 0) {
-                throw new Error(`Demucs process failed with exit code ${exitCode}:\n${stderrOutput}`);
-            }
+        if (exitCode !== 0) {
+            throw new Error(`Demucs process failed with exit code ${exitCode}:${stderr}`);
         }
 
-        return stdoutOutput + stderrOutput;
+        return stdout + stderr;
+    }
+
+    /**
+     * Executes a given command array using Node.js child_process.spawn,
+     * streaming output if `silent` is false.
+     *
+     * This is abstracted for easier testing.
+     */
+    public async executeCommand(cmd: string[]): Promise<{ stdout: string; stderr: string; exitCode: number }> {
+        return new Promise((resolve, reject) => {
+            const proc = spawn(cmd[0], cmd.slice(1), { stdio: ['ignore', 'pipe', 'pipe'] });
+
+            let stdout = '';
+            let stderr = '';
+
+            proc.stdout?.on('data', (chunk) => {
+                const text = chunk.toString();
+                stdout += text;
+                if (!this.config.silent) {
+                    process.stdout.write(text);
+                }
+            });
+
+            proc.stderr?.on('data', (chunk) => {
+                const text = chunk.toString();
+                stderr += text;
+                if (!this.config.silent) {
+                    process.stderr.write(text);
+                }
+            });
+
+            proc.on('close', (code) => {
+                resolve({ stdout, stderr, exitCode: code ?? 0 });
+            });
+
+            proc.on('error', (err) => {
+                reject(err);
+            });
+        });
     }
 }
