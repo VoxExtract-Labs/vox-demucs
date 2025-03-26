@@ -6,20 +6,9 @@
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",
     "types": "./dist/types/index.d.ts",
-    "files": [
-        "dist",
-        "LICENSE",
-        "README.md"
-    ],
+    "files": ["dist", "LICENSE", "README.md"],
     "homepage": "https://voxextract-labs.github.io/vox-demucs/",
-    "keywords": [
-        "demucs",
-        "audio-separation",
-        "voice-extraction",
-        "machine-learning",
-        "bun",
-        "typescript"
-    ],
+    "keywords": ["demucs", "audio-separation", "voice-extraction", "machine-learning", "bun", "typescript"],
     "exports": {
         ".": {
             "import": "./dist/index.js",
