@@ -185,7 +185,7 @@ export class Demucs {
             let stdout = '';
             let stderr = '';
 
-            proc.stdout?.on('data', (chunk) => {
+            proc.stdout.on('data', (chunk) => {
                 const text = chunk.toString();
                 stdout += text;
                 if (!this.config.silent) {
@@ -193,7 +193,7 @@ export class Demucs {
                 }
             });
 
-            proc.stderr?.on('data', (chunk) => {
+            proc.stderr.on('data', (chunk) => {
                 const text = chunk.toString();
                 stderr += text;
                 if (!this.config.silent) {
