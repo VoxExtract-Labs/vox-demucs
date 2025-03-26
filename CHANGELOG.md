@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.0.0](https://github.com/VoxExtract-Labs/vox-demucs/compare/v1.1.0...v2.0.0) (2025-03-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* added mounting of out-dir when using docker
+* removed Bun.env for compatibility with Node.js
+
+### Bug Fixes
+
+* added mounting of out-dir when using docker ([a531a8b](https://github.com/VoxExtract-Labs/vox-demucs/commit/a531a8baf76a7ba69bec8a3fd87d2d68d3bc28c7))
+* **CI:** fixed bad env name for NPM token ([eca32c3](https://github.com/VoxExtract-Labs/vox-demucs/commit/eca32c3e059b400cf9a3552270b7060712ac1bcd))
+* removed Bun.env for compatibility with Node.js ([2fe7353](https://github.com/VoxExtract-Labs/vox-demucs/commit/2fe73533ee97e4cbd4ac243bbce8f25a1fd5be52))
+
 ## [1.1.0](https://github.com/VoxExtract-Labs/vox-demucs/compare/v1.0.0...v1.1.0) (2025-03-26)
 
 
