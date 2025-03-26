@@ -79,5 +79,5 @@ export const DEFAULT_CONFIG: Partial<DemucsConfig> = {
     device: 'cpu',
     silent: true,
     demucsEngine: 'local',
-    dockerImage: Bun.env.DOCKER_IMAGE ?? 'voxextractlabs/vox-demucs:1.0.0',
+    dockerImage: 'voxextractlabs/vox-demucs:1.0.0',
 };
