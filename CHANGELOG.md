@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/VoxExtract-Labs/vox-demucs/compare/v1.0.0...v1.1.0) (2025-03-26)
+
+
+### Features
+
+* created build script ([ba5c53f](https://github.com/VoxExtract-Labs/vox-demucs/commit/ba5c53f99d43ab1898456dc595f117e0ec3b0086))
+
+
+### Bug Fixes
+
+* fixed tests to mock new Node friendly implementation ([5d96fb4](https://github.com/VoxExtract-Labs/vox-demucs/commit/5d96fb4e108d6af7f2702993c4d1abfa737d5a61))
+
 ## 1.0.0 (2025-03-26)
 
 
