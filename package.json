@@ -1,6 +1,6 @@
 {
     "name": "@voxextractlabs/vox-demucs",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "description": "A Bun-native interface for vocal/instrument separation using Demucs",
     "license": "MIT",
     "type": "module",
