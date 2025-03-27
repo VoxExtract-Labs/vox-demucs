@@ -2,6 +2,7 @@
 [![License](https://img.shields.io/npm/l/@voxextractlabs/vox-demucs)](./LICENSE)
 [![Build Status](https://github.com/VoxExtract-Labs/vox-demucs/actions/workflows/pr-check.yml/badge.svg)](https://github.com/VoxExtract-Labs/vox-demucs/actions/workflows/pr-check.yml)
 [![Codecov](https://codecov.io/gh/VoxExtract-Labs/vox-demucs/graph/badge.svg?token=76R6BPF9WK)](https://codecov.io/gh/VoxExtract-Labs/vox-demucs)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/3c68d4afd088475a8fde5b00277cec2f)](https://app.codacy.com/gh/VoxExtract-Labs/vox-demucs/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Bundlephobia](https://img.shields.io/bundlephobia/minzip/@voxextractlabs/vox-demucs)](https://bundlephobia.com/package/@voxextractlabs/vox-demucs)
 
 # @voxextractlabs/vox-demucs

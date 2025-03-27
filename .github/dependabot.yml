@@ -1,0 +1,39 @@
+version: 2
+updates:
+  # Bun (bun.lockb files and package.json)
+  - package-ecosystem: "bun"
+    directory: "/" # Root of the project
+    schedule:
+      interval: "weekly" # Options: "daily", "weekly", "monthly"
+      day: "monday" # Optional: default is Sunday
+      time: "08:00" # Optional UTC time
+    commit-message:
+      prefix: "chore(deps): "
+    open-pull-requests-limit: 5
+    rebase-strategy: "auto"
+    labels:
+      - "dependencies"
+      - "bun"
+    assignees:
+      - "angelxmoreno"
+    reviewers:
+      - "angelxmoreno"
+      - "voxextractlabs"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/" # Looks at .github/workflows
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+    commit-message:
+      prefix: "chore(deps): "
+    labels:
+      - "dependencies"
+      - "github-actions"
+    assignees:
+      - "angelxmoreno"
+    reviewers:
+      - "angelxmoreno"
+      - "voxextractlabs"
