@@ -1,0 +1,29 @@
+coverage:
+  precision: 2  # Show percentages with 2 decimal places
+
+  # Fail PRs if project or patch coverage drops below target
+  status:
+    project:
+      default:
+        target: 80%         # Minimum overall project coverage
+        threshold: 1%       # Allow 1% drop from base
+        if_ci_failed: error
+        informational: false
+    patch:
+      default:
+        target: 80%         # Coverage for new/changed lines
+        threshold: 1%
+        if_ci_failed: error
+        informational: false
+
+comment:
+  layout: "reach, diff, flags, files"  # What to show in the PR comment
+  behavior: default                    # Replace comment on new pushes
+  require_changes: true               # Only post comment if coverage changes
+  show_carryforward_flags: false
+  hide_comment_details: false
+  after_n_builds: 1                   # Post comment after 1 CI build
+
+parsers:
+  javascript:
+    enable_partials: true            # Support partial coverage in JS/TS
