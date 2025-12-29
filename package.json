@@ -32,7 +32,7 @@
         "@commitlint/config-conventional": "^19.8.0",
         "@types/bun": "latest",
         "directory-tree": "^3.5.2",
-        "lefthook": "^1.11.3",
+        "lefthook": "^2.0.13",
         "prompts": "^2.4.2",
         "typedoc": "^0.28.1",
         "voice-extractor-shared": "github:VoxExtract-Labs/voice-extractor-shared#main"
